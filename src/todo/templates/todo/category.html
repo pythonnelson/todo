@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<title>Ministry of Foreign Affairs and International Cooperation | To DO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+<link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}">
+
+<style>
+	input{
+		width: 100%;
+		padding: 10px;
+		margin-bottom: 15px;
+		box-sizing: border-box;
+	}
+</style>
+
+<body>
+	{% include 'todo/navbar.html' %}<br>
+
+	<div class="container">
+		<div class="w3-container">
+
+		  <div class="w3-bar w3-black">
+		    <button class="w3-bar-item w3-button tablink w3-red" onclick="openCity(event,'myTitle')">{{ title }}</button>
+		    <!-- <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'viewAppointments')">View Appointments</button> -->
+		    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'viewPriority')">View Priority Level</button>
+		  </div>
+		  
+		  <div id="myTitle" class="w3-container w3-border city">
+		    <form method="POST" action=""><br>
+				{% csrf_token %}
+
+				<h5 style="font-weight: bold;">{{ title }}</h5><br>
+
+				{{ form }} <br><br>
+
+				<input class="btn btn-primary" type="submit" name="submit" value="Add Category" />
+				<a href="/" class="btn btn-danger btn-block">Back Home</a>
+			</form><br>
+		  </div>
+<!-- 
+		  <div id="viewAppointments" class="w3-container w3-border city" style="display:none"><br>
+		    <h5 style="font-weight: bold;">View Appointments</h5><br>
+		    	<div>
+
+					{% for task in tasks %}
+						
+						<div class="item-row">
+
+							<span>{{ task }}</span><br>
+
+							<span style="float: right;" class="timer"><b>Due:</b> {{ task.due|timeuntil }}</span>
+
+						</div>	
+						
+					{% endfor %}
+				</div>
+
+		  </div> -->
+
+		  <div id="viewPriority" class="w3-container w3-border city" style="display:none"><br>
+		    <small>The labels below shows the <strong>PRIORITY LEVEL</strong> of each task in the app, always refer to this <br>
+		    section if you are in doubt of what they are. Thanks</small> <br> <br> 
+
+		    <hr>
+
+		    <span class="badge badge-pill badge-danger">Very High</span>
+		    <span class="badge badge-pill badge-warning">High</span>
+		    <span class="badge badge-pill badge-info">Medium</span>
+		    <span class="badge badge-pill badge-success">Low</span>
+
+		    <hr>
+
+		    <small>
+		    	<p>For every color label represent a priority level; <br> <strong>Priority Level</strong> represents the level of urgency a meeting is scheduled for. The application is developed to order tasks according to their level of priority and date of completion or due.</p>
+		    </small>
+
+		  </div>
+		</div>
+	</div>
+
+<script>
+function openCity(evt, cityName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("city");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" w3-red", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " w3-red";
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+<!-- <form method="POST" action="">
+	{% csrf_token %}
+
+	<h1>{{ title }}</h1>
+
+	{{ form }}
+
+	<input type="submit" name="submit" value="Add Category" />
+</form> -->

@@ -1,0 +1,89 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<title>Ministry of Foreign Affairs and International Cooperation | Update Task</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.min.css" integrity="sha256-/8xGgcV6Mp9fFa2u2lLYOWYNluCdrHEvBfiwhpkD/Js=" crossorigin="anonymous" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/south-street/theme.min.css" integrity="sha256-j5WK5GB3+w3i2jRf0bV9dkjJ+mm+TiSEG6WgNiD+gWk=" crossorigin="anonymous" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.structure.min.css" integrity="sha256-rxais37anKUnpL5QzSYte+JnIsmkGmLG+ZhKSkZkwVM=" crossorigin="anonymous" />
+<link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}">
+
+<script
+  src="https://code.jquery.com/jquery-3.5.0.min.js"
+  integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+  crossorigin="anonymous">
+  </script>
+
+<script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+  integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+  crossorigin="anonymous">
+</script>
+
+<style>
+	body{
+		background: #638cb8;
+	}
+	input{
+		width: 100%;
+		padding: 10px;
+		margin-bottom: 15px;
+		box-sizing: border-box;
+	}
+	.container{
+		width:50%;
+		margin: 20px auto;
+		padding:20px;
+		background-color: #fff;
+		border-radius: 3px;
+		box-shadow: 6px 2px 30px 0px rgba(0,0,0,0.75);
+	}
+	.item-row{
+		background-color: #218a2f;
+		margin: 10px;
+		padding: 20px;
+		border-radius: 3px;
+		color: white;
+		font-size: 16px;
+		box-shadow: 0px -1px 10px -4px rgba(0,0,0,0.75);
+	}
+	.save{
+		background-color:  #218a2f;
+		color: white;
+	}
+</style>
+
+{% if messages %}
+    <ul class="messages">
+       {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+       {% endfor %}
+   </ul>
+{% endif %}
+
+<div class="container">
+
+	<p><a class="btn btn-sm btn-warning" href="{% url 'todo:task_list' %}" >Back to list</a></p>
+	<b>Update Task</b><p>
+
+	<form method="POST" action="">{% csrf_token %}
+		{{form|crispy}}
+		<input class="btn btn-sm btn-warning" type="submit" value="Update" name="Update">
+	</form>
+
+<b></b>
+
+</div>
+
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="due"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        dateFormat: 'yy-mm-dd',
+      };
+      date_input.datepicker(options);
+    })
+</script>

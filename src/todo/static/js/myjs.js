@@ -1,0 +1,1 @@
+$('.table').paging({limit:3});

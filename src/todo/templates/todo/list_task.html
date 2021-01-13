@@ -1,0 +1,244 @@
+{% load crispy_forms_tags %}
+{% load static %}
+<title>Ministry of Foreign Affairs and International Cooperation | All Tasks</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.min.css" integrity="sha256-/8xGgcV6Mp9fFa2u2lLYOWYNluCdrHEvBfiwhpkD/Js=" crossorigin="anonymous" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/south-street/theme.min.css" integrity="sha256-j5WK5GB3+w3i2jRf0bV9dkjJ+mm+TiSEG6WgNiD+gWk=" crossorigin="anonymous" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.structure.min.css" integrity="sha256-rxais37anKUnpL5QzSYte+JnIsmkGmLG+ZhKSkZkwVM=" crossorigin="anonymous" />
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+<script src="{% static 'js/pager/pager/paging.js' %}"></script>
+<script src="{% static 'js/myjs.js' %}"></script>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/fontawesome-free-5.1.15.1/css/all.css' %}">
+
+<link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}">
+
+
+<script
+  src="https://code.jquery.com/jquery-3.5.0.min.js"
+  integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ="
+  crossorigin="anonymous">
+  </script>
+
+<script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+  integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+  crossorigin="anonymous">
+</script>
+
+<style>
+	body{
+		background: #638cb8;
+	}
+	input{
+		width: 100%;
+		padding: 10px;
+		margin-bottom: 15px;
+		box-sizing: border-box;
+	}
+	.container{
+		width:50%;
+		margin: 20px auto;
+		padding:20px;
+		background-color: #fff;
+		border-radius: 3px;
+		box-shadow: 6px 2px 30px 0px rgba(0,0,0,0.75);
+	}
+	.item-row{
+		background-color: #906abd;
+		margin: 10px;
+		padding: 20px;
+		border-radius: 3px;
+		color: white;
+		font-size: 16px;
+		box-shadow: 0px -1px 10px -4px rgba(0,0,0,0.75);
+	}
+
+	.timer{
+		background-color: #dc3545;
+		border-radius: 5px;
+		padding: 5px;
+
+	}
+	.success{
+		list-style: none;
+		background-color: #2e6da4;
+		color: white;
+		box-shadow: 12px 12px 12px #e61c66;
+		text-align: center;
+	}
+	.pagination {
+		text-align: right;
+	}
+</style>
+
+{% include 'todo/navbar.html' %}
+
+    {% if messages %}
+            <ul class="messages">
+                   {% for message in messages %}
+                         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                   {% endfor %}
+           </ul>
+    {% endif %}
+
+<div class="container">
+	<form method="POST" action="/">
+		{% csrf_token %}
+		{{form|crispy}}
+		<input class="btn btn-info btn-block" type="submit" name="save" value="Save">
+	</form> 
+
+	<!-- <form method="POST" action="/">
+		{% csrf_token %}
+	  <div class="form-group">
+	    <label for="exampleInputEmail1">{{ form.category.label }}</label>
+	    {{ form.category }}
+	  </div>
+	  
+	  <div class="form-group">
+	    <label for="exampleInputEmail1">{{ form.level_of_priority.label }}</label>
+	    {{ form.level_of_priority }}
+	  </div>
+
+	  <div class="form-group">
+	    {{ form.title }}
+	  </div>
+
+	  <div class="form-group">
+	    {{ form.start_date|date:"D d M Y" }}
+	  </div>
+
+	  <button type="submit" class="btn btn-primary btn-block">Submit</button>
+	</form> -->
+
+		<div class="todo-list">
+
+			{% for task in tasks %}
+				
+				<div class="item-row">
+
+					{% if task.complete == True %}
+
+						<strike>{{task}}, {{task.due}}</strike><br>
+
+					{% else %}
+
+						<span>{{ task|truncatechars:50 }}</span><br>
+
+						<span style="float: right;" class="timer"><b>Due:</b> {{ task.due|timeuntil }}</span>
+
+					{% endif %}	<br>
+
+					<a class="btn btn-sm btn-info" href="{% url 'todo:update_task' task.id %}">Edit</a>
+					<a class="btn btn-sm btn-danger" href="{% url 'todo:delete_task' task.id %}">Delete</a>
+
+					<!-- Reserved for level of priority -->
+					
+					{% if task.level_of_priority == 'Low' %}
+						Priority Level: <span class="badge badge-pill badge-success"> {{ task.level_of_priority }} </span>
+
+					{% elif task.level_of_priority == 'Medium' %}
+						Priority Level: <span class="badge badge-pill badge-info"> {{ task.level_of_priority }} </span>
+
+					{% elif task.level_of_priority == 'High' %}
+						{% if task.complete == True %}
+							Priority Level Was: <span class="badge badge-pill badge-warning"> {{ task.level_of_priority }} </span>
+
+						{% else %}
+							Priority Level: <span class="badge badge-pill badge-warning"> {{ task.level_of_priority }} </span>
+
+							<div class="spinner-grow text-warning" role="status">
+							  <span class="sr-only">Loading...</span>
+							</div>
+						{% endif %}
+
+					{% else %}
+
+						{% if task.complete == True %}
+							Priority Level Was: <span class="badge badge-pill badge-danger"> {{ task.level_of_priority }} </span>
+
+						{% else %}
+
+							Priority Level: <span class="badge badge-pill badge-danger"> {{ task.level_of_priority }} </span>
+							<div class="spinner-grow text-danger" role="status">
+							  <span class="sr-only">Loading...</span>
+							</div>
+						{% endif %}
+
+					{% endif %}
+					<!-- <a class="btn btn-sm btn-success" href="#">{{ task.level_of_priority }}</a> -->
+
+				</div>	
+				{% empty %}
+					<p>No records found in the database, please add to view them here</p>
+				
+			{% endfor %} 
+
+		</div>
+
+
+		<ul class="pagination">
+			{% for i in paginator.page_range %}
+				<li class="page-item {% if i == page_number %} active {% endif %}">
+					<a class="page-link" href="?page={{ i }}">{{ i }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+		<!-- <div class="my-3">
+			<button class="btn btn-primary">&laquo; Previous</button>
+			<button class="btn btn-primary float-right">Next &raquo;</button>
+		</div> -->
+
+	<hr>
+
+	<div class="row">
+		
+		<div class="accordion" id="accordionExample">
+		  <div class="card">
+		    <div class="card-header" id="headingOne">
+		      <h2 class="mb-0">
+		        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		        	{% for post in file %}
+		        	  <a href="{{ post.adminUpload.url }}" download="{{ post.adminUpload.url }}">Download Quick Start Manual</a>
+		         	{% endfor %}
+		        </button>
+		      </h2>
+		    </div>
+
+		    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+		      <div class="card-body">
+					Please click on the above button to download the Ministry of Foreign Affairs and International Cooperation, Minister <strong>TO DO</strong> application <b>'Quick Start Manual'</b>. If you have trouble downloading from that link, download from 
+					{% for post in file %}
+		        	  <a href="{{ post.adminUpload.url }}" download="{{ post.adminUpload.url }}">here</a>
+		         	{% endfor %}
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+	</div>
+</div>
+
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="due"]'); //our date input has the name "due"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        dateFormat: 'yy-mm-dd',
+      };
+      date_input.datepicker(options);
+    })
+</script>
+
+
+
+
+<!-- <h6>{{ post.title }}</h6>
+<a href="{{ post.adminUpload.url }}" download="{{ post.adminUpload.url }}">Download here</a> -->
